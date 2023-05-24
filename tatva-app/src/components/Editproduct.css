@@ -1,0 +1,22 @@
+.EditMain{
+    margin-top: 50px;
+}
+.Name{
+    margin-top: 75px;
+}
+.shop{
+    margin-top: 35px;
+}
+.img{
+    margin-top: 60px;
+}
+.buttons{
+    margin-top: 35px;
+}
+.bottomImg{
+    margin-top: 80px;
+    justify-content: center;
+    background-color:rgb(204, 200, 200);
+    height: 100px;
+    text-align: center;
+  }

@@ -1,0 +1,41 @@
+.productTitle{
+    text-align: center;
+    margin-top: 50px;
+}
+.searchProduct{
+    margin-top: 70px;
+}
+#searchInput{
+    height: 40px;
+    width: 300px;
+    border: 2px solid grey;
+
+}
+.searchBtn{
+    margin-left: 10px;
+    height: 40px;
+    width: 150px;
+
+}
+.products{
+    margin-top: 32px;
+    
+}
+.title{
+    margin-bottom: 20px;
+}
+.productdata{
+    height: 64px;
+    align-items: center;
+}
+.rowsProduct{
+    margin-top: 28px;
+}
+.bottomImg{
+    margin-top: 80px;
+    justify-content: center;
+    background-color:rgb(204, 200, 200);
+    height: 100px;
+    text-align: center;
+  }
+  
