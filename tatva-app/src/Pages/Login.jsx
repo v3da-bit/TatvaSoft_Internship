@@ -7,17 +7,22 @@ import {
 } from "@mui/material";
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Footer from "../Components/Footer";
-import Header from "../Components/Header";
+import { useAuthContext } from "../context/auth";
+
+
 import { TextField } from "@mui/material";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
-import Searchbar from "../Components/Searchbar";
+
 import { Formik } from "formik";
 import * as Yup from "yup";
 import authService from "../service/auth.service";
 import { toast, ToastContainer } from "react-toastify";
+import { updateUserName } from "../State/slice/userSlice";
+import { useDispatch } from "react-redux";
+
 
 function Login() {
+  const authContext = useAuthContext();
   const navigate = useNavigate();
   const initialValues = {
     email: "",
@@ -29,17 +34,27 @@ function Login() {
       .min(5, "Password must be 5 charaters at minimum")
       .required("Password must Required"),
   });
-
+  const dispatch=useDispatch()
   const onSubmit = (values) => {
+    if (authContext.user.id) {
+      
+      console.log(authContext.user.id)
+    }else{
+      console.log("none "+authContext.user);
+    }
     // alert(JSON.stringify(values));
     authService
       .login(values)
       .then((res) => {
+        console.log("this is data :",res)
+        localStorage.setItem("user", JSON.stringify(res));
+        dispatch(updateUserName(res))
+        
         delete res._id;
         delete res.__v;
         setTimeout(() => {
           toast.success("successfully logged in");
-        }, 3000);
+        }, 2000);
         navigate("/");
       })
       .catch((err) => {
@@ -58,8 +73,7 @@ function Login() {
   return (
     <div className="flex-1 ">
       <ToastContainer />
-      <Header />
-      <Searchbar />
+
       <Breadcrumbs
         separator={<NavigateNextIcon fontSize="small" />}
         aria-label="breadcrumb"
@@ -122,7 +136,7 @@ function Login() {
           </Button>
         </div>
         <div>
-          <Typography variant="h6">Ragistered Customers</Typography>
+          <Typography variant="h6">Registered Customers</Typography>
           <Divider
             sx={{
               marginTop: "20px",
@@ -180,7 +194,6 @@ function Login() {
                 <Button
                   variant="contained"
                   type="submit"
-                  disabled={isSubmitting}
                   sx={{
                     color: "white",
                     backgroundColor: "#f14d54",
@@ -189,6 +202,7 @@ function Login() {
                     },
                     marginTop: "60px",
                   }}
+                  
                 >
                   Submit
                 </Button>
@@ -197,7 +211,6 @@ function Login() {
           </Formik>
         </div>
       </div>
-      <Footer />
     </div>
   );
 }

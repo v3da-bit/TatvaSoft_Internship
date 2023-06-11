@@ -10,9 +10,6 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Footer from "../Components/Footer";
-import Header from "../Components/Header";
-import Searchbar from "../Components/Searchbar";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -20,6 +17,8 @@ import userService from "../service/user.service";
 import authService from "../service/auth.service";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { updateUserName } from "../State/slice/userSlice";
+import { useDispatch } from "react-redux";
 
 function Register() {
   const navigate = useNavigate();
@@ -56,9 +55,13 @@ function Register() {
       .required("Required"),
     roleId: Yup.string().required("Role is required"),
   });
+  const dispatch=useDispatch()
+  
 
   const onSubmit = (values) => {
     delete values.confirmPassword;
+
+    localStorage.setItem("user", JSON.stringify(values));
     // alert(JSON.stringify(values));
     authService
       .create(values)
@@ -69,6 +72,8 @@ function Register() {
       .catch((err) => {
         console.log(err);
       });
+      // dispatch(updateUserName(values))
+   
   };
   const [roleList, setRoleList] = useState([]);
 
@@ -78,7 +83,9 @@ function Register() {
       .then((res) => {
         setRoleList(res);
       })
-      .catch();
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   useEffect(() => {
@@ -88,8 +95,6 @@ function Register() {
   return (
     <div className="">
       <ToastContainer />
-      <Header />
-      <Searchbar />
       <Breadcrumbs
         separator={<NavigateNextIcon fontSize="small" />}
         aria-label="breadcrumb"
@@ -143,7 +148,7 @@ function Register() {
           isSubmitting,
         }) => (
           <form onSubmit={handleSubmit} className="flex-1 ml-40 mr-40">
-            <div className="grid grid-cols-2 gap-20 mt-5 ">
+            <div className="grid grid-cols-2 gap-5 mt-5 ">
               <FormControl fullWidth>
                 <label>First Name*</label>
                 <TextField
@@ -218,7 +223,7 @@ function Register() {
               Login Information
             </Typography>
             <Divider />
-            <div className="grid grid-cols-2 gap-20 mt-5 ">
+            <div className="grid grid-cols-2 gap-5 mt-5 ">
               <FormControl fullWidth>
                 <label>Password*</label>
                 <TextField
@@ -269,7 +274,6 @@ function Register() {
           </form>
         )}
       </Formik>
-      <Footer />
     </div>
   );
 }
